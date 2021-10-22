@@ -1,5 +1,14 @@
 use bracket_lib::prelude::*;
 
+const SCREEN_WIDTH: i32 = 80;
+const SCREEN_HEIGHT: i32 = 50;
+const FRAME_DURATION: f32 = 75.0;
+const INITIAL_X: i32 = 5;
+const INITIAL_Y: i32 = 25;
+const INITIAL_FRAME_TIME: f32 = 0.0;
+const TERMINAL_VELOCITY: f32 = 2.0;
+const GRAVITY_ACCELERATION: f32 = 0.2;
+
 enum GameMode {
     Menu,
     Playing,
@@ -17,7 +26,7 @@ impl Player {
         Self {
             x,
             y,
-            velocity: 0.0,
+            velocity: INITIAL_FRAME_TIME,
         }
     }
 
@@ -26,8 +35,8 @@ impl Player {
     }
 
     fn gravity_and_move(&mut self) {
-        if self.velocity < 2.0 {
-            self.velocity += 0.2;
+        if self.velocity < TERMINAL_VELOCITY {
+            self.velocity += GRAVITY_ACCELERATION;
         }
         self.y += self.velocity as i32;
         self.x += 1;
@@ -37,7 +46,7 @@ impl Player {
     }
 
     fn flap(&mut self) {
-        self.velocity = -2.0;
+        self.velocity = -TERMINAL_VELOCITY;
     }
 }
 
@@ -51,8 +60,8 @@ impl State {
     fn new() -> Self {
         Self {
             mode: GameMode::Menu,
-            player: Player::new(5, 25),
-            frame_time: 0.0,
+            player: Player::new(INITIAL_X, INITIAL_Y),
+            frame_time: INITIAL_FRAME_TIME,
         }
     }
 
@@ -64,8 +73,8 @@ impl State {
     fn restart(&mut self) {
         // TODO: Fill in stub
         self.mode = GameMode::Playing;
-        self.player = Player::new(5, 25);
-        self.frame_time = 0.0;
+        self.player = Player::new(INITIAL_X, INITIAL_Y);
+        self.frame_time = INITIAL_FRAME_TIME;
     }
 
     fn main_menu(&mut self, ctx: &mut BTerm) {
